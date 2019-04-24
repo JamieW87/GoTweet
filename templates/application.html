@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <title>Buffalo - Twitapp</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="../public/assets/main.css">
     <%= stylesheetTag("application.css") %>
     <meta name="csrf-param" content="authenticity_token" />
     <meta name="csrf-token" content="<%= authenticity_token %>" />
@@ -12,11 +13,51 @@
   </head>
   <body>
 
+    <!-- Header -->
+    <header id="header" class="alt">
+      <nav id="nav">
+        <ul>
+            <li>
+                <a href="/">HOME</a>
+                </li>
+          <li><%= if (current_user) { %>
+            Hello <%= current_user.Name %>
+            <a href="/auth" data-method="DELETE"><br>LOG OUT</a>
+        <% } else { %>
+          <a href="/auth/twitter">Please sign in</a>
+          <% } %></li>
+        </ul>
+      </nav>
+    </header>
+
+  <!-- Banner -->
+    <section id="banner">
+
+      <!--
+        ".inner" is set up as an inline-block so it automatically expands
+        in both directions to fit whatever's inside it. This means it won't
+        automatically wrap lines, so be sure to use line breaks where
+        appropriate (<br />).
+      -->
+      <div class="inner">
+          <h1>TwitDov</h1>
+        <p>Sign in through<br />
+        your Twitter, and tweet
+        <br />
+        from here.
+        </p>
+      </div>
+
+    </section>
+    <div id="main">
     <div class="container">
       <%= partial("flash.html") %>
       <%= yield %>
     </div>
-
+  </div>
+  <div class="footer">
+    <p>DOVU</p>
+  </div>
     <%= javascriptTag("application.js") %>
   </body>
 </html>

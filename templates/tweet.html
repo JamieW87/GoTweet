@@ -1,0 +1,11 @@
+<br>
+<h3>Tweet tweet!</h3>
+<form action="/tweet" method="POST">
+    <input name="authenticity_token" type="hidden" value="<%= authenticity_token %>">
+    <div class="form-group">
+        <label for="tweet">Your tweet:</label>
+        <input type="text" name="tweetbody" class="form-control" id="tweetbody" placeholder="Tweet body" 
+        value="Follow us to see our journey in the mobility revolution @Dovuofficial">
+    </div>
+    <button type="submit" class="btn btn-primary">Send</button>
+</form>

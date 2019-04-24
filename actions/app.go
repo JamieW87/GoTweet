@@ -13,6 +13,8 @@ import (
 	csrf "github.com/gobuffalo/mw-csrf"
 	i18n "github.com/gobuffalo/mw-i18n"
 	"github.com/gobuffalo/packr/v2"
+
+	"github.com/markbates/goth/gothic"
 )
 
 // ENV is used to help switch settings based on where the
@@ -59,8 +61,25 @@ func App() *buffalo.App {
 		// Setup and use translations:
 		app.Use(translations())
 
+		//New router for post function
 		app.GET("/", HomeHandler)
+		//GET and POST handlers for tweet page.
+		app.GET("/tweet", TweetHandler)
+		app.POST("/tweet", SendHandler)
+		app.GET("/tweet/confirm", ConfirmHandler)
 
+		auth := app.Group("/auth")
+		app.Use(SetCurrentUser)
+		//Enables authorisation on the whole app. So user has to be logged in.
+		app.Use(Authorize)
+		//Skips authorise for the auth page and homepage so that people can see homepage and login
+		app.Middleware.Skip(Authorize, HomeHandler)
+		bah := buffalo.WrapHandlerFunc(gothic.BeginAuthHandler)
+		auth.GET("/{provider}", bah)
+		//Logout function. Destroys the auth session
+		auth.DELETE("", AuthDestroy)
+		auth.Middleware.Skip(Authorize, bah, AuthCallback)
+		auth.GET("/{provider}/callback", AuthCallback)
 		app.ServeFiles("/", assetsBox) // serve files from the public directory
 	}
 
